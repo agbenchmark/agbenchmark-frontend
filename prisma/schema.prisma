@@ -14,8 +14,8 @@ model Metrics {
     id             Int     @id @default(autoincrement())
     difficulty     String
     success        Boolean
-    successPercent Float   @map("success_%")
-    runTime        String? // Since it's Optional[str]
+    successPercent Float
+    runTime        String?
     failReason     String?
     Test           Test[]
 }
@@ -57,8 +57,8 @@ model SuiteTest {
 model Category {
     id         Int         @id @default(autoincrement())
     name       String      @unique
-    tests      Test[] // Relationship to Test
-    suiteTests SuiteTest[] // Relationship to SuiteTest
+    tests      Test[]
+    suiteTests SuiteTest[]
 }
 
 model Report {
