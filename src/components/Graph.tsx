@@ -4,15 +4,9 @@ import { DataSet } from "vis-data";
 
 import tw from "tailwind-styled-components";
 
-interface Node {
-  id: string;
-  label: string;
-  color: string;
-  task: string;
-  shape: string;
-}
+import { GraphNode, TaskData } from "../lib/types";
 
-interface Edge {
+interface GraphEdge {
   id: string;
   from: string;
   to: string;
@@ -21,21 +15,26 @@ interface Edge {
 
 interface GraphProps {
   graphData: {
-    nodes: Node[];
-    edges: Edge[];
+    nodes: GraphNode[];
+    edges: GraphEdge[];
   };
+  setSelectedTask: React.Dispatch<React.SetStateAction<TaskData | null>>;
+  setIsTaskInfoExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Graph: React.FC<GraphProps> = ({ graphData }) => {
+const Graph: React.FC<GraphProps> = ({
+  graphData,
+  setSelectedTask,
+  setIsTaskInfoExpanded,
+}) => {
   const graphRef = useRef<HTMLDivElement>(null);
-  const [selectedTask, setSelectedTask] = useState<string | null>(null);
 
   useEffect(() => {
     if (!graphRef.current) {
       return;
     }
-    const nodes = new DataSet<Node>(graphData.nodes);
-    const edges = new DataSet<Edge>(graphData.edges);
+    const nodes = new DataSet<GraphNode>(graphData.nodes);
+    const edges = new DataSet<GraphEdge>(graphData.edges);
 
     const data = {
       nodes: nodes,
@@ -91,44 +90,23 @@ const Graph: React.FC<GraphProps> = ({ graphData }) => {
       if (params.nodes.length) {
         const nodeId = params.nodes[0];
         const clickedNodeArray = nodes.get(nodeId);
-        console.log(clickedNodeArray);
-        if (clickedNodeArray && clickedNodeArray[0]) {
-          setSelectedTask(clickedNodeArray[0].task);
+        if (clickedNodeArray) {
+          setSelectedTask((clickedNodeArray as any).data as TaskData);
+          setIsTaskInfoExpanded(true);
         }
       } else {
         setSelectedTask(null);
+        setIsTaskInfoExpanded(false);
       }
     });
   }, [graphData]);
 
-  return (
-    <FlexRowContainer>
-      <GraphContainer ref={graphRef} />
-      {selectedTask && (
-        <TaskDetails>
-          <h3>Task:</h3>
-          <p>{selectedTask}</p>
-        </TaskDetails>
-      )}
-    </FlexRowContainer>
-  );
+  return <GraphContainer ref={graphRef} />;
 };
 
 export default Graph;
 
 const GraphContainer = tw.div`
-    w-full
-    h-full
-`;
-
-const FlexRowContainer = tw.div`
-  flex
-  flex-row
-`;
-
-const TaskDetails = tw.div`
-  ml-5
-  p-2
-  border
-  border-gray-400
+  w-full
+  h-full
 `;

@@ -3,9 +3,13 @@ import Head from "next/head";
 import tw from "tailwind-styled-components";
 
 import Graph from "../components/Graph";
+import TaskInfo from "../components/TaskInfo";
+import { TaskData } from "../lib/types";
 
 const Home = () => {
   const [data, setData] = useState(null);
+  const [selectedTask, setSelectedTask] = useState<TaskData | null>(null);
+  const [isTaskInfoExpanded, setIsTaskInfoExpanded] = useState(false);
 
   useEffect(() => {
     // Load the JSON data from the public folder
@@ -30,10 +34,31 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex h-screen flex-col items-center justify-center">
-        {data && <Graph graphData={data} />}
+        {data && (
+          <Panels>
+            <Graph
+              graphData={data}
+              setSelectedTask={setSelectedTask}
+              setIsTaskInfoExpanded={setIsTaskInfoExpanded}
+            />
+            <TaskInfo
+              selectedTask={selectedTask}
+              isTaskInfoExpanded={isTaskInfoExpanded}
+              setIsTaskInfoExpanded={setIsTaskInfoExpanded}
+              setSelectedTask={setSelectedTask}
+            />
+          </Panels>
+        )}
+        {}
       </main>
     </>
   );
 };
 
 export default Home;
+
+const Panels = tw.div`
+  flex
+  h-full
+  w-full
+`;
