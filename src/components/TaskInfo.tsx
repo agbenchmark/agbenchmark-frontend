@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import tw from "tailwind-styled-components";
 
@@ -17,6 +17,27 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
   setIsTaskInfoExpanded,
   setSelectedTask,
 }) => {
+  const [isMock, setIsMock] = useState<boolean>(false);
+
+  async function fetchData() {
+    // If there's no selected task, do nothing
+    if (!selectedTask?.name) return;
+
+    const testParam = selectedTask.name;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/run_single_test?test=${testParam}&mock=${isMock}`
+      );
+      const data = await response.json();
+
+      // You can handle the response data here, if necessary
+      console.log(data);
+    } catch (error) {
+      console.error("There was an error fetching the data", error);
+    }
+  }
+
   return (
     <TaskDetails isExpanded={isTaskInfoExpanded}>
       {isTaskInfoExpanded ? (
@@ -30,7 +51,15 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
         </ToggleButton>
       ) : (
         <BenchmarkWrapper>
-          <RunButton>Run Benchmark</RunButton>
+          <RunButton onClick={fetchData}>Run Benchmark</RunButton>
+          <CheckboxWrapper>
+            <MockCheckboxInput
+              type="checkbox"
+              checked={isMock}
+              onChange={() => setIsMock(!isMock)}
+            />
+            <span>Run mock test</span>
+          </CheckboxWrapper>
           <Detail>
             <b>or click a node on the left</b>
           </Detail>
@@ -107,4 +136,19 @@ const RunButton = tw.button`
     py-1
     px-3
     rounded
+`;
+
+const MockCheckboxInput = tw.input`
+    border 
+    rounded 
+    focus:border-blue-400 
+    focus:ring 
+    focus:ring-blue-200 
+    focus:ring-opacity-50
+`;
+
+const CheckboxWrapper = tw.label`
+    flex 
+    items-center 
+    space-x-2 
 `;
