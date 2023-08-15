@@ -19,14 +19,24 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
 }) => {
   return (
     <TaskDetails isExpanded={isTaskInfoExpanded}>
-      <ToggleButton
-        onClick={() => {
-          setIsTaskInfoExpanded(!isTaskInfoExpanded);
-          setSelectedTask(null);
-        }}
-      >
-        {isTaskInfoExpanded ? "→" : "Click a node to expand"}
-      </ToggleButton>
+      {isTaskInfoExpanded ? (
+        <ToggleButton
+          onClick={() => {
+            setIsTaskInfoExpanded(!isTaskInfoExpanded);
+            setSelectedTask(null);
+          }}
+        >
+          →
+        </ToggleButton>
+      ) : (
+        <BenchmarkWrapper>
+          <RunButton>Run Benchmark</RunButton>
+          <Detail>
+            <b>or click a node on the left</b>
+          </Detail>
+        </BenchmarkWrapper>
+      )}
+
       {selectedTask && (
         <>
           <TaskName>{selectedTask?.name}</TaskName>
@@ -35,14 +45,15 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
             <b>Cutoff:</b> {selectedTask?.cutoff}
           </Detail>
           <Detail>
-            <b>Description:</b> {selectedTask?.info.description}
+            <b>Description:</b> {selectedTask?.info?.description}
           </Detail>
           <Detail>
-            <b>Difficulty:</b> {selectedTask?.info.difficulty}
+            <b>Difficulty:</b> {selectedTask?.info?.difficulty}
           </Detail>
           <Detail>
             <b>Category:</b> {selectedTask?.category}
           </Detail>
+          <RunButton>Run Task</RunButton>
         </>
       )}
     </TaskDetails>
@@ -50,7 +61,7 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
 };
 
 const TaskDetails = tw.div<{ isExpanded: boolean }>`
-  ${(p) => (p.isExpanded ? "w-1/2" : "w-32")}
+  ${(p) => (p.isExpanded ? "w-1/2" : "w-1/4")}
   ml-5
   transition-all
   duration-500
@@ -69,6 +80,13 @@ const ToggleButton = tw.button`
     text-2xl
 `;
 
+const BenchmarkWrapper = tw.div`
+    flex
+    flex-col
+    items-center
+    justify-center
+`;
+
 const TaskName = tw.h1`
     font-bold
     text-2xl
@@ -80,5 +98,13 @@ const TaskPrompt = tw.p`
     break-words
 `;
 const Detail = tw.p`
-    
+    mt-2
+`;
+
+const RunButton = tw.button`
+    border
+    mt-4
+    py-1
+    px-3
+    rounded
 `;
