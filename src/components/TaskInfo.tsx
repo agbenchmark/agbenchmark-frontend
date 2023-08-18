@@ -18,6 +18,7 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
   setSelectedTask,
 }) => {
   const [isMock, setIsMock] = useState<boolean>(false);
+  const [responseData, setResponseData] = useState<any>();
 
   async function fetchData() {
     // If there's no selected task, do nothing
@@ -32,6 +33,7 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
       const data = await response.json();
 
       // You can handle the response data here, if necessary
+      setResponseData(data);
       console.log(data);
     } catch (error) {
       console.error("There was an error fetching the data", error);
