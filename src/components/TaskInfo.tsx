@@ -20,7 +20,20 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
   const [isMock, setIsMock] = useState<boolean>(false);
   const [responseData, setResponseData] = useState<any>();
 
-  async function fetchData() {
+  const runBenchmark = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/run?mock=${isMock}`);
+      const data = await response.json();
+
+      // You can handle the response data here, if necessary
+      setResponseData(data);
+      console.log(data);
+    } catch (error) {
+      console.error("There was an error fetching the data", error);
+    }
+  };
+
+  const runTest = async () => {
     // If there's no selected task, do nothing
     if (!selectedTask?.name) return;
 
@@ -38,7 +51,7 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
     } catch (error) {
       console.error("There was an error fetching the data", error);
     }
-  }
+  };
 
   return (
     <TaskDetails isExpanded={isTaskInfoExpanded}>
@@ -53,7 +66,7 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
         </ToggleButton>
       ) : (
         <BenchmarkWrapper>
-          <RunButton onClick={fetchData}>Run Benchmark</RunButton>
+          <RunButton onClick={runBenchmark}>Run Benchmark</RunButton>
           <CheckboxWrapper>
             <MockCheckboxInput
               type="checkbox"
@@ -84,7 +97,15 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
           <Detail>
             <b>Category:</b> {selectedTask?.category}
           </Detail>
-          <RunButton>Run Task</RunButton>
+          <RunButton onClick={runTest}>Run Task</RunButton>
+          <CheckboxWrapper>
+            <MockCheckboxInput
+              type="checkbox"
+              checked={isMock}
+              onChange={() => setIsMock(!isMock)}
+            />
+            <span>Run mock test</span>
+          </CheckboxWrapper>
         </>
       )}
     </TaskDetails>
