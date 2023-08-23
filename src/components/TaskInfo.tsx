@@ -45,9 +45,13 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
       );
       const data = await response.json();
 
-      // You can handle the response data here, if necessary
-      setResponseData(data);
-      console.log(data);
+      if (data["returncode"] > 0) {
+        console.log(data["stderr"]);
+      } else {
+        // You can handle the response data here, if necessary
+        setResponseData(data["stdout"]);
+        console.log(data["stdout"]);
+      }
     } catch (error) {
       console.error("There was an error fetching the data", error);
     }
