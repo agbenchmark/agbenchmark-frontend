@@ -109,6 +109,9 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
             />
             <span>Run mock test</span>
           </CheckboxWrapper>
+          <Detail>
+            <b>Previous Run</b>
+          </Detail>
         </>
       )}
     </TaskDetails>
