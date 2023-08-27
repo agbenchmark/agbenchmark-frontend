@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import tw from "tailwind-styled-components";
 
 import { TaskData } from "../lib/types";
-import LatestRunData from "./LatestRunData";
+import RunData from "./RunData";
 import SelectedTask from "./SelectedTask";
 import MockCheckbox from "./MockCheckbox";
 
@@ -21,17 +21,25 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
   setSelectedTask,
 }) => {
   const [isMock, setIsMock] = useState<boolean>(false);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [allResponseData, setAllResponseData] = useState<any[]>([]);
   const [responseData, setResponseData] = useState<any>();
   const [cutoff, setCutoff] = useState<number | null>(null);
 
   const runBenchmark = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/run?mock=${isMock}`);
+      let url = `http://localhost:8000/run?mock=${isMock}`;
+      cutoff && !isMock && (url += `&cutoff=${cutoff}`);
+      const response = await fetch(url);
       const data = await response.json();
 
-      // You can handle the response data here, if necessary
-      setResponseData(data);
-      console.log(data);
+      if (data["returncode"] > 0) {
+        throw new Error(data["stderr"]);
+      } else {
+        const jsonObject = JSON.parse(data["stdout"]);
+        setAllResponseData([...allResponseData, jsonObject]);
+        setResponseData(jsonObject);
+      }
     } catch (error) {
       console.error("There was an error fetching the data", error);
     }
@@ -65,6 +73,8 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
           setIsMock={setIsMock}
           cutoff={cutoff}
           setResponseData={setResponseData}
+          allResponseData={allResponseData}
+          setAllResponseData={setAllResponseData}
         />
       )}
       {!isMock && (
@@ -80,7 +90,16 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
           />
         </CheckboxWrapper>
       )}
-      {responseData && <LatestRunData latestRun={responseData} />}
+      <Header>Previous Run</Header>
+      {responseData && <RunData latestRun={responseData} />}
+      <Header>All Runs</Header>
+      {allResponseData.length === 0 && <p>No runs yet</p>}
+      {allResponseData.length > 1 &&
+        allResponseData
+          .slice(1)
+          .map((responseData, index) => (
+            <RunData key={index} latestRun={responseData} />
+          ))}
     </TaskDetails>
   );
 };
@@ -98,6 +117,12 @@ const TaskDetails = tw.div<{ isExpanded: boolean }>`
   border-gray-400
   h-full
   overflow-x-hidden
+`;
+
+const Header = tw.h5`
+  text-xl
+  font-semibold
+  mt-4
 `;
 
 const ToggleButton = tw.button`

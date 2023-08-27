@@ -11,6 +11,8 @@ interface SelectedTaskProps {
   setIsMock: React.Dispatch<React.SetStateAction<boolean>>;
   cutoff: number | null;
   setResponseData: React.Dispatch<React.SetStateAction<any>>;
+  allResponseData: any[];
+  setAllResponseData: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const SelectedTask: React.FC<SelectedTaskProps> = ({
@@ -19,6 +21,8 @@ const SelectedTask: React.FC<SelectedTaskProps> = ({
   setIsMock,
   cutoff,
   setResponseData,
+  setAllResponseData,
+  allResponseData,
 }) => {
   const runTest = async () => {
     // If there's no selected task, do nothing
@@ -36,6 +40,7 @@ const SelectedTask: React.FC<SelectedTaskProps> = ({
         throw new Error(data["stderr"]);
       } else {
         const jsonObject = JSON.parse(data["stdout"]);
+        setAllResponseData([...allResponseData, jsonObject]);
         setResponseData(jsonObject);
       }
     } catch (error) {
@@ -57,7 +62,8 @@ const SelectedTask: React.FC<SelectedTaskProps> = ({
         <b>Difficulty:</b> {selectedTask?.info?.difficulty}
       </Detail>
       <Detail>
-        <b>Category:</b> {selectedTask?.category}
+        <b>Category:</b>{" "}
+        {selectedTask?.category.map((task, i) => (i > 0 ? `, ${task}` : task))}
       </Detail>
       <RunButton onClick={runTest}>Run Task</RunButton>
       <MockCheckbox isMock={isMock} setIsMock={setIsMock} />

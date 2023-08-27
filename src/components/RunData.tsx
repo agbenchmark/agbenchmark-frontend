@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { LatestRun } from "../lib/types";
 import tw from "tailwind-styled-components";
 
-const LatestRunData: React.FC<{ latestRun: LatestRun }> = ({ latestRun }) => {
+const RunData: React.FC<{ latestRun: LatestRun }> = ({ latestRun }) => {
   return (
     <Card>
-      <Header>Previous Run</Header>
       <Section>
         <Label>Command:</Label>
         <Data>{latestRun.command}</Data>
@@ -41,7 +40,7 @@ const LatestRunData: React.FC<{ latestRun: LatestRun }> = ({ latestRun }) => {
   );
 };
 
-export default LatestRunData;
+export default RunData;
 
 const Card = tw.div`
   bg-white
@@ -49,11 +48,7 @@ const Card = tw.div`
   rounded
   shadow-lg
   w-full
-`;
-
-const Header = tw.h5`
-  text-xl
-  font-semibold
+  mt-4
 `;
 
 const Section = tw.div`
