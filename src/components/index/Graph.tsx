@@ -4,7 +4,7 @@ import { DataSet } from "vis-data";
 
 import tw from "tailwind-styled-components";
 
-import { GraphNode, TaskData } from "../lib/types";
+import { GraphNode, TaskData } from "../../lib/types";
 
 interface GraphEdge {
   id: string;

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import tw from "tailwind-styled-components";
 
-import Graph from "../components/Graph";
-import TaskInfo from "../components/TaskInfo";
+import Graph from "../components/index/Graph";
+import TaskInfo from "../components/index/TaskInfo";
 import { TaskData } from "../lib/types";
 
 const Home = () => {

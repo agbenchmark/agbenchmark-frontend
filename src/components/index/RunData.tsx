@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LatestRun } from "../lib/types";
+import { LatestRun } from "../../lib/types";
 import tw from "tailwind-styled-components";
 
 const RunData: React.FC<{ latestRun: LatestRun }> = ({ latestRun }) => {

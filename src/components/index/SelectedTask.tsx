@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import tw from "tailwind-styled-components";
 
-import { TaskData } from "../lib/types";
+import { TaskData } from "../../lib/types";
 import MockCheckbox from "./MockCheckbox";
 
 interface SelectedTaskProps {
