@@ -33,5 +33,9 @@ const DataPage: React.FC = () => {
 export default DataPage;
 
 const PageContainer = tw.div`
-  
+  px-12
+  w-full
+  h-full
+  min-h-screen
+  bg-gray-50
 `;

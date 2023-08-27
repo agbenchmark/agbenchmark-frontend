@@ -8,8 +8,7 @@ interface ReportsProps {
 const Reports: React.FC<ReportsProps> = ({ data }) => {
   return (
     <ReportsContainer>
-      <div>Dashboard</div>
-      <div>Search reports</div>
+      <Table></Table>
     </ReportsContainer>
   );
 };
@@ -17,5 +16,13 @@ const Reports: React.FC<ReportsProps> = ({ data }) => {
 export default Reports;
 
 const ReportsContainer = tw.div`
-  
+  w-full
+`;
+
+const Table = tw.div`
+  w-full
+  border
+  shadow-lg
+  rounded-xl
+  h-96
 `;
