@@ -17,7 +17,10 @@ const CurrentEnv: React.FC<CurrentEnvProps> = ({ data }) => {
       <Title>Env Variables</Title>
       <EnvWrapper>
         <EnvLabel>Agent Name</EnvLabel>
-        <EnvInput placeholder="mini-agi" />
+        <EnvInput
+          onChange={(e) => setAgentName(e.targetValue)}
+          placeholder="mini-agi"
+        />
       </EnvWrapper>
       <EnvWrapper>
         <EnvLabel>Report Location</EnvLabel>
