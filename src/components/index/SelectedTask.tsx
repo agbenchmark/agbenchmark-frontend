@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import tw from "tailwind-styled-components";
 
 import { TaskData } from "../../lib/types";
+import RunButton from "./RunButton";
 import MockCheckbox from "./MockCheckbox";
 
 interface SelectedTaskProps {
@@ -24,12 +25,14 @@ const SelectedTask: React.FC<SelectedTaskProps> = ({
   setAllResponseData,
   allResponseData,
 }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const runTest = async () => {
     // If there's no selected task, do nothing
     if (!selectedTask?.name) return;
 
     const testParam = selectedTask.name;
-
+    setIsLoading(true);
     try {
       let url = `http://localhost:8000/run_single_test?test=${testParam}&mock=${isMock}`;
       cutoff && !isMock && (url += `&cutoff=${cutoff}`);
@@ -46,6 +49,7 @@ const SelectedTask: React.FC<SelectedTaskProps> = ({
     } catch (error) {
       console.error("There was an error fetching the data", error);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -65,19 +69,13 @@ const SelectedTask: React.FC<SelectedTaskProps> = ({
         <b>Category:</b>{" "}
         {selectedTask?.category.map((task, i) => (i > 0 ? `, ${task}` : task))}
       </Detail>
-      <RunButton onClick={runTest}>Run Task</RunButton>
+      <RunButton isLoading={isLoading} testRun={runTest} />
       <MockCheckbox isMock={isMock} setIsMock={setIsMock} />
     </>
   );
 };
 
 export default SelectedTask;
-
-const CutoffInput = tw.input`
-  border rounded w-1/2 h-8 text-sm
-  focus:outline-none focus:border-blue-400
-  pl-2
-`;
 
 const TaskName = tw.h1`
     font-bold
@@ -91,14 +89,6 @@ const TaskPrompt = tw.p`
 `;
 const Detail = tw.p`
     mt-2
-`;
-
-const RunButton = tw.button`
-    border
-    mt-4
-    py-1
-    px-3
-    rounded
 `;
 
 const MockCheckboxInput = tw.input`

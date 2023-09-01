@@ -5,6 +5,7 @@ import tw from "tailwind-styled-components";
 const RunData: React.FC<{ latestRun: LatestRun }> = ({ latestRun }) => {
   return (
     <Card>
+      {console.log(latestRun)}
       <Section>
         <Label>Command:</Label>
         <Data>{latestRun.command}</Data>

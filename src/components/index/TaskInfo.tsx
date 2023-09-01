@@ -91,12 +91,15 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
         </CheckboxWrapper>
       )}
       <Header>Previous Run</Header>
+      {console.log(responseData)}
+      {!responseData && <p>No runs yet</p>}
       {responseData && <RunData latestRun={responseData} />}
       <Header>All Runs</Header>
       {allResponseData.length === 0 && <p>No runs yet</p>}
+      {console.log(allResponseData, allResponseData.length)}
       {allResponseData.length > 1 &&
         allResponseData
-          .slice(1)
+          .slice(0, -1)
           .map((responseData, index) => (
             <RunData key={index} latestRun={responseData} />
           ))}
