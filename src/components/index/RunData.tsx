@@ -2,10 +2,58 @@ import React, { useState } from "react";
 import { LatestRun } from "../../lib/types";
 import tw from "tailwind-styled-components";
 
+const RecursiveDropdown: React.FC<{ data: any; skipKeys: string[] }> = ({
+  data,
+  skipKeys,
+}) => {
+  if (typeof data !== "object" || data === null) {
+    return null;
+  }
+
+  return (
+    <>
+      {Object.entries(data).map(([key, value]) => {
+        if (skipKeys.includes(key)) {
+          return null;
+        }
+
+        // Special case for 'category' key
+        if (key === "category" && Array.isArray(value)) {
+          return (
+            <Section key={key}>
+              <Label>{key}:</Label>
+              <Data>{value.join(", ")}</Data>
+            </Section>
+          );
+        }
+
+        if (typeof value === "object" && value !== null) {
+          return (
+            <Dropdown key={key}>
+              <DropdownSummary>{key}</DropdownSummary>
+              <DropdownContent>
+                <RecursiveDropdown data={value} skipKeys={skipKeys} />
+              </DropdownContent>
+            </Dropdown>
+          );
+        } else {
+          return (
+            <Section key={key}>
+              <Label>{key}:</Label>
+              <Data>
+                {typeof value === "string" ? value : JSON.stringify(value)}
+              </Data>
+            </Section>
+          );
+        }
+      })}
+    </>
+  );
+};
+
 const RunData: React.FC<{ latestRun: LatestRun }> = ({ latestRun }) => {
   return (
     <Card>
-      {console.log(latestRun)}
       <Section>
         <Label>Command:</Label>
         <Data>{latestRun.command}</Data>
@@ -27,13 +75,12 @@ const RunData: React.FC<{ latestRun: LatestRun }> = ({ latestRun }) => {
         <Dropdown key={testKey}>
           <DropdownSummary>{testKey}</DropdownSummary>
           <DropdownContent>
-            {latestRun.tests[testKey] &&
-              Object.entries(latestRun.tests[testKey]!).map(([key, value]) => (
-                <Section key={key}>
-                  <Label>{key}:</Label>
-                  <Data>{JSON.stringify(value)}</Data>
-                </Section>
-              ))}
+            {latestRun.tests[testKey] && (
+              <RecursiveDropdown
+                data={latestRun.tests[testKey]}
+                skipKeys={["cost", "data_path"]}
+              />
+            )}
           </DropdownContent>
         </Dropdown>
       ))}
