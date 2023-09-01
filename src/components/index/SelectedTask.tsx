@@ -69,7 +69,12 @@ const SelectedTask: React.FC<SelectedTaskProps> = ({
         <b>Category:</b>{" "}
         {selectedTask?.category.map((task, i) => (i > 0 ? `, ${task}` : task))}
       </Detail>
-      <RunButton isLoading={isLoading} testRun={runTest} />
+      <RunButton
+        cutoff={selectedTask?.cutoff}
+        isLoading={isLoading}
+        testRun={runTest}
+        isMock={isMock}
+      />
       <MockCheckbox isMock={isMock} setIsMock={setIsMock} />
     </>
   );
