@@ -66,8 +66,7 @@ const SelectedTask: React.FC<SelectedTaskProps> = ({
         <b>Difficulty:</b> {selectedTask?.info?.difficulty}
       </Detail>
       <Detail>
-        <b>Category:</b>{" "}
-        {selectedTask?.category.map((task, i) => (i > 0 ? `, ${task}` : task))}
+        <b>Category:</b> {selectedTask?.category.join(", ")}
       </Detail>
       <RunButton
         cutoff={selectedTask?.cutoff}

@@ -6,6 +6,7 @@ import { TaskData } from "../../lib/types";
 import RunData from "./RunData";
 import SelectedTask from "./SelectedTask";
 import MockCheckbox from "./MockCheckbox";
+import RunButton from "./RunButton";
 
 interface TaskInfoProps {
   selectedTask: TaskData | null;
@@ -21,12 +22,13 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
   setSelectedTask,
 }) => {
   const [isMock, setIsMock] = useState<boolean>(false);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allResponseData, setAllResponseData] = useState<any[]>([]);
   const [responseData, setResponseData] = useState<any>();
   const [cutoff, setCutoff] = useState<number | null>(null);
 
   const runBenchmark = async () => {
+    setIsLoading(true);
     try {
       let url = `http://localhost:8000/run?mock=${isMock}`;
       cutoff && !isMock && (url += `&cutoff=${cutoff}`);
@@ -43,6 +45,7 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
     } catch (error) {
       console.error("There was an error fetching the data", error);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -58,7 +61,12 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
         </ToggleButton>
       ) : (
         <BenchmarkWrapper>
-          <RunButton onClick={runBenchmark}>Run Benchmark</RunButton>
+          <RunButton
+            cutoff={selectedTask?.cutoff}
+            isLoading={isLoading}
+            testRun={runBenchmark}
+            isMock={isMock}
+          />
           <MockCheckbox isMock={isMock} setIsMock={setIsMock} />
           <Detail>
             <b>or click a node on the left</b>
@@ -91,12 +99,10 @@ const TaskInfo: React.FC<TaskInfoProps> = ({
         </CheckboxWrapper>
       )}
       <Header>Previous Run</Header>
-      {console.log(responseData)}
       {!responseData && <p>No runs yet</p>}
       {responseData && <RunData latestRun={responseData} />}
       <Header>All Runs</Header>
       {allResponseData.length === 0 && <p>No runs yet</p>}
-      {console.log(allResponseData, allResponseData.length)}
       {allResponseData.length > 1 &&
         allResponseData
           .slice(0, -1)
@@ -146,35 +152,8 @@ const CutoffInput = tw.input`
   pl-2
 `;
 
-const TaskName = tw.h1`
-    font-bold
-    text-2xl
-    break-words
-`;
-
-const TaskPrompt = tw.p`
-    text-gray-900
-    break-words
-`;
 const Detail = tw.p`
     mt-2
-`;
-
-const RunButton = tw.button`
-    border
-    mt-4
-    py-1
-    px-3
-    rounded
-`;
-
-const MockCheckboxInput = tw.input`
-    border 
-    rounded 
-    focus:border-blue-400 
-    focus:ring 
-    focus:ring-blue-200 
-    focus:ring-opacity-50
 `;
 
 const CheckboxWrapper = tw.label`

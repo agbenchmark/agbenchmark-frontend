@@ -52,6 +52,7 @@ const RecursiveDropdown: React.FC<{ data: any; skipKeys: string[] }> = ({
 };
 
 const RunData: React.FC<{ latestRun: LatestRun }> = ({ latestRun }) => {
+  const date = new Date(latestRun.benchmark_start_time);
   return (
     <Card>
       <Section>
@@ -59,16 +60,18 @@ const RunData: React.FC<{ latestRun: LatestRun }> = ({ latestRun }) => {
         <Data>{latestRun.command}</Data>
       </Section>
       <Section>
-        <Label>Start Time:</Label>
-        <Data>{latestRun.benchmark_start_time}</Data>
+        <Label>Start time:</Label>
+        <Data>{date.toLocaleString()}</Data>
       </Section>
       <Section>
-        <Label>Run Time:</Label>
+        <Label>Run time:</Label>
         <Data>{latestRun.metrics.run_time}</Data>
       </Section>
       <Section>
-        <Label>Highest Difficulty:</Label>
-        <Data>{latestRun.metrics.highest_difficulty}</Data>
+        <Label>Highest difficulty:</Label>
+        <Data>
+          {latestRun.metrics.highest_difficulty.split(":")[1]?.slice(-1)}
+        </Data>
       </Section>
 
       {Object.keys(latestRun.tests).map((testKey) => (
