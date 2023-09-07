@@ -63,6 +63,9 @@ const SelectedTask: React.FC<SelectedTaskProps> = ({
         <b>Description:</b> {selectedTask?.info?.description}
       </Detail>
       <Detail>
+        <b>Answer:</b> {selectedTask?.ground?.answer}
+      </Detail>
+      <Detail>
         <b>Difficulty:</b> {selectedTask?.info?.difficulty}
       </Detail>
       <Detail>
