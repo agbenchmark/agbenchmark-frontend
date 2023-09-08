@@ -1,3 +1,5 @@
+## This repo has been deprecated. The benchmark front-emd code is now in the main AutoGPT repo under the benchmark folder: https://github.com/Significant-Gravitas/Auto-GPT
+
 # agbenchmark-frontend
 
 Frontend for https://github.com/Significant-Gravitas/Auto-GPT-Benchmarks
