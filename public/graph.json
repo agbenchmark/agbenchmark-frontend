@@ -1062,12 +1062,6 @@
       "from": "agbenchmark/generate_test.py::TestWrite5FilesWithArray::test_method[challenge_data0]",
       "to": "agbenchmark/generate_test.py::TestWrite6Files::test_method[challenge_data0]",
       "arrows": "to"
-    },
-    {
-      "id": "agbenchmark/generate_test.py::TestRememberGoal_Simple::test_method[challenge_data0]_to_agbenchmark/generate_test.py::TestRememberGoal_Simple::test_method[challenge_data0]",
-      "from": "agbenchmark/generate_test.py::TestRememberGoal_Simple::test_method[challenge_data0]",
-      "to": "agbenchmark/generate_test.py::TestRememberGoal_Simple::test_method[challenge_data0]",
-      "arrows": "to"
     }
   ]
 }
